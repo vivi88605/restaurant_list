@@ -17,6 +17,12 @@ app.use(express.static('public'))
 app.get('/', (req, res) => {
   res.render('index', { restaurantList: restaurantData.results })
 })
+app.get('/search', (req, res) => {//when searchbar is empty, show all restaurants
+  console.log('req.query: ', req.query)
+  const keyword = req.query.keyword.toLowerCase()
+  const FilteredRestaurant = restaurantData.results.filter(item => { return item.name.toLowerCase().includes(keyword) || item.category.toLowerCase().includes(keyword) })
+  res.render('index', { restaurantList: FilteredRestaurant, keyword: keyword })
+})
 app.get('/restaurants/:restaurant_id', (req, res) => {
   console.log('req.params.restaurant_id: ', req.params.restaurant_id)
   const ClickedRestaurant = restaurantData.results.find(item => item.id.toString() === req.params.restaurant_id)
